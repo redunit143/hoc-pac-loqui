@@ -31,12 +31,13 @@ p20 = Pin(20, Pin.IN)
 p21 = Pin(21, Pin.IN)
 p22 = Pin(22, Pin.IN)
 
-pins = { 2: p2, 3:p3, 4:p4, 5:p4, 6:p6, 7:p7, 8:p8, 9:p9, 10:p10, 11:p11, 12:p12, 13:p13, 14:p14, 15:p15, 16:p16, 17:p17, 18:p18, 19:p19, 20:p20, 21:p21, 22:p22 }
-
+#pins = { 2: p2, 3:p3, 4:p4, 5:p4, 6:p6, 7:p7, 8:p8, 9:p9, 10:p10, 11:p11, 12:p12, 13:p13, 14:p14, 15:p15, 16:p16, 17:p17, 18:p18, 19:p19, 20:p20, 21:p21, 22:p22 }
+pins = { 2: p2 }
 def debounce(p):
     for i in range(5):
         while (p.value() == ACTIVE_VALUE):
             time.sleep_ms(DEBOUNCE_TIME_MS)
+            print(i, p.value(), p)
         
     
     

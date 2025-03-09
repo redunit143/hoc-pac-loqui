@@ -205,6 +205,7 @@ class BLETemperatureCentral:
         if not self.is_connected():
             return
         self._read_callback = callback
+        print("reading now")
         try:
             self._ble.gattc_read(self._conn_handle, self._value_handle)
         except OSError as error:
@@ -270,17 +271,17 @@ def demo(ble, central):
     # Explicitly issue reads
     while central.is_connected():
         central.read(callback=print_temp)
-        #sleep_ms_flash_led(central, 1, 20)
+        sleep_ms_flash_led(central, 1, 1020)
 
     print("Disconnected")
 
 
-def scan_messages(ble, central, callback):
+def scan_messages(ble, central, scanCallback):
     not_found = False
 
     def on_scan(addr_type, addr, name):
         if addr_type is not None:
-            print("Found sensor: %s" % name)
+            print("Found sensor for scanning: %s" % name)
             central.connect()
         else:
             nonlocal not_found
@@ -295,22 +296,28 @@ def scan_messages(ble, central, callback):
         if not_found:
             return
 
-    print("Connected")
+    print("Connected for scan")
 
     # Explicitly issue reads
     while central.is_connected():
-        central.read(callback=print_temp)
-        callback()
-        #sleep_ms_flash_led(central, 1, 2000)
+        central.read(callback=scanCallback)
+        #callback()
+        time.sleep_ms(200)
 
     print("Disconnected")
 
-def abc():
-    print(".");
+
+def processData(result, raw):
+    msgcat = raw % 10
+    ndx = int((raw / 10 ) % 10)
+    msgid = int(raw / 100)
+    print(".", raw, '[', msgcat, ',', ndx, ',', msgid, ']');
 
 if __name__ == "__main__":
     ble = bluetooth.BLE()
     central = BLETemperatureCentral(ble)
     while(True):
-        scan_messages(ble, central, abc)
-        sleep_ms_flash_led(central, 1, 10000)
+        scan_messages(ble, central, processData)
+        #demo(ble, central)
+        sleep_ms(1000)
+        print("--------------------")
