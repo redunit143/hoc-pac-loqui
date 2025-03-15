@@ -1,14 +1,12 @@
 
-import bluetooth
 import time
-from reader import BLETemperatureCentral
 
 from machine import Pin
 
 ACTIVE_VALUE = 1
 DEBOUNCE_TIME_MS = 100
 
-#pins = (0,1,2,3,4,5,6,7,8)
+"""
 p2 = Pin(2, Pin.IN)
 p3 = Pin(3, Pin.IN)
 p4 = Pin(4, Pin.IN)
@@ -31,21 +29,35 @@ p20 = Pin(20, Pin.IN)
 p21 = Pin(21, Pin.IN)
 p22 = Pin(22, Pin.IN)
 
-#pins = { 2: p2, 3:p3, 4:p4, 5:p4, 6:p6, 7:p7, 8:p8, 9:p9, 10:p10, 11:p11, 12:p12, 13:p13, 14:p14, 15:p15, 16:p16, 17:p17, 18:p18, 19:p19, 20:p20, 21:p21, 22:p22 }
 pins = { 2: p2 }
-def debounce(p):
+"""
+
+
+def setInputPins(pinNumbers):
+    pins = {}
+    for i in range(len(pinNumbers)):
+        pins.update({pinNumbers[i], Pin(pinNumbers[i], Pin.IN)})
+    return pins    
+
+
+def setOutputPins(pinNumbers):
+    pins = {}
+    for i in range(len(pinNumbers)):
+        pins.update({pinNumbers[i], Pin(pinNumbers[i], Pin.OUT)})
+    return pins    
+
+
+def debounce(thePin):
     for i in range(5):
-        while (p.value() == ACTIVE_VALUE):
+        while (thePin.value() == ACTIVE_VALUE):
             time.sleep_ms(DEBOUNCE_TIME_MS)
-            print(i, p.value(), p)
-        
-    
-    
-def pollgpio():
+
+
+def pollgpio(debug = false):
     for ndx, p in pins.items():
         if (p.value() == ACTIVE_VALUE):
-            print(ndx, p, p.value())
+            if debug:
+                print(ndx, p, p.value())
             debounce(p)
             return ndx
-        #print(ndx, p)
     return 0;
