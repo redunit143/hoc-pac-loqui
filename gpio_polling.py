@@ -2,7 +2,9 @@
 import time
 
 from machine import Pin
-
+"""
+gpio pins 2 to 22 in pico
+"""
 ACTIVE_VALUE = 1
 DEBOUNCE_TIME_MS = 100
 
